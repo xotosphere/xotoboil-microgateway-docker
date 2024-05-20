@@ -1,0 +1,28 @@
+services:
+  eureka-server:
+    container_name: eurekaserver
+    build:
+      dockerfile: ./docker/eurekaserver.Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8761:8761"
+    networks:
+      - spring
+
+  mygateway:
+    container_name: mygateway
+    build:
+      dockerfile: ./docker/mygateway.Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - eureka-server
+    ports:
+      - "8080:8080"
+    networks:
+      - spring
+
+networks:
+  spring:
+    driver: bridge
